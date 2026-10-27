@@ -1,4 +1,11 @@
 
+import {
+  Box,
+  Button,
+  Stack,
+  Typography,
+} from "@mui/material";
+
 import { ArrowRight } from "lucide-react";
 
 const SectionHeader = ({
@@ -9,37 +16,95 @@ const SectionHeader = ({
   onAction,
 }) => {
   return (
-    <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div>
+    <Stack
+      direction={{ xs: "column", sm: "row" }}
+      alignItems={{ xs: "stretch", sm: "flex-end" }}
+      justifyContent="space-between"
+      spacing={2}
+      sx={{ mb: { xs: 3, sm: 4 } }}
+    >
+      <Box sx={{ minWidth: 0, flex: 1 }}>
         {eyebrow && (
-          <p className="mb-2 text-sm font-medium uppercase tracking-wider text-primary">
+          <Typography
+            variant="overline"
+            sx={{
+              display: "block",
+              mb: 1,
+              color: "primary.main",
+              fontWeight: 700,
+              letterSpacing: "0.12em",
+              lineHeight: 1.5,
+            }}
+          >
             {eyebrow}
-          </p>
+          </Typography>
         )}
 
-        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+        <Typography
+          component="h2"
+          variant="h4"
+          sx={{
+            fontWeight: 800,
+            fontSize: {
+              xs: "1.5rem",
+              sm: "1.85rem",
+              md: "2rem",
+            },
+            lineHeight: 1.2,
+            letterSpacing: "-0.035em",
+            overflowWrap: "anywhere",
+          }}
+        >
           {title}
-        </h2>
+        </Typography>
 
         {description && (
-          <p className="mt-2 max-w-xl text-muted-foreground">
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{
+              mt: 1,
+              maxWidth: 600,
+              lineHeight: 1.7,
+            }}
+          >
             {description}
-          </p>
+          </Typography>
         )}
-      </div>
+      </Box>
 
       {actionLabel && onAction && (
-        <button
-          type="button"
+        <Button
           onClick={onAction}
-          className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+          variant="text"
+          color="primary"
+          endIcon={<ArrowRight size={18} aria-hidden="true" />}
+          sx={{
+            alignSelf: {
+              xs: "flex-start",
+              sm: "auto",
+            },
+            flexShrink: 0,
+            fontWeight: 700,
+            textTransform: "none",
+            whiteSpace: "nowrap",
+            "& .MuiButton-endIcon": {
+              transition: "transform 200ms ease",
+            },
+            "&:hover .MuiButton-endIcon": {
+              transform: "translateX(3px)",
+            },
+            "&:focus-visible": {
+              outline: "2px solid",
+              outlineColor: "primary.main",
+              outlineOffset: 3,
+            },
+          }}
         >
           {actionLabel}
-
-          <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-        </button>
+        </Button>
       )}
-    </div>
+    </Stack>
   );
 };
 

@@ -1,4 +1,12 @@
 
+import {
+  Box,
+  Paper,
+  Typography,
+  useTheme,
+  alpha,
+} from "@mui/material";
+
 const CategoryCard = ({
   name,
   description,
@@ -7,26 +15,78 @@ const CategoryCard = ({
   background,
   onClick,
 }) => {
+  const theme = useTheme();
+
+  // Supports existing Tailwind color classes or MUI color values.
+  const iconColor =
+    color?.startsWith("#") || color?.startsWith("rgb")
+      ? color
+      : theme.palette.primary.main;
+
+  const iconBackground =
+    background?.startsWith("#") || background?.startsWith("rgb")
+      ? background
+      : alpha(iconColor, 0.12);
+
   return (
-    <button
+    <Paper
+      component="button"
       type="button"
       onClick={onClick}
-      className="group w-full rounded-2xl border border-border bg-card p-5 text-left transition-all duration-200 hover:-translate-y-1 hover:border-primary/40 hover:bg-muted"
+      elevation={0}
+      sx={{
+        width: "100%",
+        p: 2.5,
+        textAlign: "left",
+        cursor: "pointer",
+        borderRadius: 4,
+        border: `1px solid ${theme.palette.divider}`,
+        bgcolor: "background.paper",
+        color: "text.primary",
+        transition: "all 200ms ease",
+        "&:hover": {
+          transform: "translateY(-4px)",
+          borderColor: alpha(theme.palette.primary.main, 0.5),
+          bgcolor: "action.hover",
+        },
+        "&:focus-visible": {
+          outline: `2px solid ${theme.palette.primary.main}`,
+          outlineOffset: 3,
+        },
+      }}
     >
-      <div
-        className={`flex size-12 items-center justify-center rounded-xl ${background}`}
+      <Box
+        sx={{
+          width: 48,
+          height: 48,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 3,
+          bgcolor: iconBackground,
+          color: iconColor,
+        }}
       >
-        <Icon className={`size-6 ${color}`} />
-      </div>
+        {Icon && <Icon size={24} />}
+      </Box>
 
-      <h3 className="mt-4 font-semibold tracking-tight">
+      <Typography
+        component="h3"
+        variant="subtitle1"
+        fontWeight={700}
+        sx={{ mt: 2, letterSpacing: "-0.02em" }}
+      >
         {name}
-      </h3>
+      </Typography>
 
-      <p className="mt-1 text-sm leading-5 text-muted-foreground">
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ mt: 0.5, lineHeight: 1.6 }}
+      >
         {description}
-      </p>
-    </button>
+      </Typography>
+    </Paper>
   );
 };
 

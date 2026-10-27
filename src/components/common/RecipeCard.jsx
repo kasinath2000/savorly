@@ -1,94 +1,128 @@
-
 import {
-  Clock3,
-  Flame,
-  Users,
-} from "lucide-react";
+  Box,
+  Chip,
+  Typography,
+  alpha,
+  useTheme,
+} from "@mui/material";
 
-const RecipeCard = ({
-  recipe,
-  onClick,
-}) => {
-  const {
-    name,
-    description,
-    image,
-    category,
-    cuisine,
-    totalTime,
-    servings,
-    difficulty,
-  } = recipe;
+const RecipeCard = ({ recipe, onClick }) => {
+  const theme = useTheme();
+  const { name, description, image, category } = recipe;
 
   return (
-    <button
+    <Box
+      component="button"
       type="button"
       onClick={() => onClick?.(recipe)}
-      className="group w-full overflow-hidden rounded-2xl border border-border bg-card text-left transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-black/10"
+      sx={{
+        display: "block",
+        width: "100%",
+        p: 0,
+        overflow: "hidden",
+        textAlign: "left",
+        cursor: "pointer",
+        borderRadius: 3,
+        border: `1px solid ${theme.palette.divider}`,
+        bgcolor: "background.paper",
+        color: "text.primary",
+        font: "inherit",
+        transition: "transform 300ms ease, border-color 300ms ease",
+        "&:hover": {
+          transform: "translateY(-4px)",
+          borderColor: alpha(theme.palette.primary.main, 0.5),
+        },
+        "&:hover .recipe-image": {
+          transform: "scale(1.05)",
+        },
+        "&:focus-visible": {
+          outline: `2px solid ${theme.palette.primary.main}`,
+          outlineOffset: 3,
+        },
+      }}
     >
-      {/* Image */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-        <img
+      <Box
+        sx={{
+          position: "relative",
+          aspectRatio: "4 / 3",
+          overflow: "hidden",
+          bgcolor: "action.hover",
+        }}
+      >
+        <Box
+          component="img"
           src={image}
-          alt={name}
-          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+          alt={name || "Recipe"}
           loading="lazy"
+          className="recipe-image"
+          sx={{
+            width: "100%",
+            height: "100%",
+            display: "block",
+            objectFit: "cover",
+            transition: "transform 500ms ease",
+          }}
         />
 
-        {/* Image Overlay */}
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" />
+        <Box
+          sx={{
+            position: "absolute",
+            inset: "auto 0 0",
+            height: 96,
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.7), transparent)",
+            pointerEvents: "none",
+          }}
+        />
 
-        {/* Category */}
-        <div className="absolute left-3 top-3">
-          <span className="rounded-full bg-background/90 px-3 py-1.5 text-xs font-medium text-foreground shadow-sm backdrop-blur-md">
-            {category}
-          </span>
-        </div>
+        {category && (
+          <Chip
+            label={category}
+            size="small"
+            sx={{
+              position: "absolute",
+              top: 12,
+              left: 12,
+              bgcolor: alpha(theme.palette.background.paper, 0.92),
+              color: "text.primary",
+              backdropFilter: "blur(8px)",
+              fontWeight: 600,
+              maxWidth: "calc(100% - 24px)",
+            }}
+          />
+        )}
+      </Box>
 
-        {/* Difficulty */}
-        <div className="absolute bottom-3 right-3">
-          <span className="rounded-full bg-background/90 px-3 py-1.5 text-xs font-medium text-foreground backdrop-blur-md">
-            {difficulty}
-          </span>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-5">
-        {/* Cuisine */}
-        <p className="text-xs font-medium uppercase tracking-wider text-primary">
-          {cuisine}
-        </p>
-
-        {/* Name */}
-        <h3 className="mt-1.5 line-clamp-1 text-lg font-semibold tracking-tight">
+      <Box sx={{ p: 2.5 }}>
+        <Typography
+          component="h3"
+          variant="h6"
+          fontWeight={700}
+          sx={{
+            letterSpacing: "-0.02em",
+            overflowWrap: "anywhere",
+          }}
+        >
           {name}
-        </h3>
+        </Typography>
 
-        {/* Description */}
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            mt: 1,
+            lineHeight: 1.7,
+            minHeight: "3.4em",
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
+        >
           {description}
-        </p>
-
-        {/* Meta */}
-        <div className="mt-5 flex items-center gap-4 border-t border-border pt-4 text-xs text-muted-foreground">
-          <div className="flex items-center gap-1.5">
-            <Clock3 className="size-3.5 text-primary" />
-            <span>{totalTime} min</span>
-          </div>
-
-          <div className="flex items-center gap-1.5">
-            <Users className="size-3.5 text-primary" />
-            <span>{servings} servings</span>
-          </div>
-
-          <div className="ml-auto flex items-center gap-1.5">
-            <Flame className="size-3.5 text-primary" />
-            <span>{difficulty}</span>
-          </div>
-        </div>
-      </div>
-    </button>
+        </Typography>
+      </Box>
+    </Box>
   );
 };
 
